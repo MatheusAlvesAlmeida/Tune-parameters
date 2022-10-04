@@ -29,3 +29,10 @@ def finalTreatment(df):
         df[col] = label.fit_transform(df[col])
     df.drop(['PassengerId', 'Name', 'Ticket'], axis=1, inplace=True)
     return df
+
+
+def getTratedData():
+    df = pd.read_csv('./Data/titanic_train.csv')
+    df = dropColumns(df)
+    df = finalTreatment(df)
+    return df
