@@ -17,6 +17,8 @@ To do:
 - implement a crossover method
 - add crossover rate
 - algorithm flow: generate population > sort by fitness > check if fitness doesn't change > if it doesn't change, stop the loop > if it changes, parents selection > crossover > mutate the population > if the fitness is 1, stop the loop > if the fitness is not 1, repeat the loop. Seems like function otimization problem.
+
+Generate charts to show the evolution of the fitness to make next steps
 """
 
 while(True):
