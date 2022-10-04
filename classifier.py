@@ -88,6 +88,3 @@ def parentSelection(population):
         parents.append(random.choice(population))
     parents = sortByFitness(parents)
     return [parents[0], parents[1]]
-
-
-# To-do - Implement a crossover method
