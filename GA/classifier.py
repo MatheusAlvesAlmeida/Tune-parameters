@@ -18,7 +18,7 @@ def getTrainTestVariables(df):
     return train_test_split(df.drop('Survived', axis=1), df['Survived'], test_size=0.30)
 
 
-def evaluate(X_train, X_test, y_train, y_test, criterion, splitter, max_depth, min_samples_leaf, class_weight):
+def calculateFitness(X_train, X_test, y_train, y_test, criterion, splitter, max_depth, min_samples_leaf, class_weight):
     model = DecisionTreeClassifier(criterion=criterion, splitter=splitter, max_depth=max_depth,
                                    min_samples_leaf=min_samples_leaf, class_weight=class_weight)
     model.fit(X_train, y_train)
@@ -38,7 +38,7 @@ def generatePopupation(size):
 
 
 def sortByFitness(population):
-    return sorted(population, key=lambda x: x[1], reverse=True)
+    return sorted(population, key=calculateFitness(), reverse=True)
 
 
 def checkIfFitnessDoesntChange(newFitness):
@@ -82,4 +82,12 @@ def mutate(individual):
     return individual
 
 
-# To-do - Implement a selection method and a crossover method
+def parentSelection(population):
+    parents = []
+    for i in range(10):
+        parents.append(random.choice(population))
+    parents = sortByFitness(parents)
+    return [parents[0], parents[1]]
+
+
+# To-do - Implement a crossover method
