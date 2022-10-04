@@ -1,15 +1,31 @@
 import pandas as pd
-from prepare_data import dropColumns, finalTreatment
-from ES.classifier import *
+from prepare_data import getTratedData
+import classifier as clf
 
+df = getTratedData()
 
-df = pd.read_csv('./Data/titanic_train.csv')
+x_train, x_test, y_train, y_test = clf.getTrainTestVariables(df)
 
-df = dropColumns(df)
-df = finalTreatment(df)
+initialPopulation = clf.generatePopupation(10)
 
-X_train, X_test, y_train, y_test = getTrainTestVariables(df)
+i = 1
 
-
-predictions = evaluate(X_train, X_test, y_train, y_test)
-print(f"Accuracy: {predictions}")
+while(True):
+    print("Generation: ", i)
+    initialPopulation = clf.sortByFitness(initialPopulation)
+    newPopulation = []
+    for i in range(5):
+        newPopulation.append(initialPopulation[i])
+        newPopulation.append(initialPopulation[i])
+    for i in range(5):
+        newPopulation.append(clf.mutate(initialPopulation[i]))
+    initialPopulation = newPopulation
+    if clf.checkIfFitnessDoesntChange(clf.calculateFitness(x_train, x_test, y_train, y_test, *initialPopulation[0])):
+        print("Best individual: ", initialPopulation[0])
+        print("Fitness: ", clf.calculateFitness(
+            x_train, x_test, y_train, y_test, *initialPopulation[0]))
+        break
+    print("Best individual: ", initialPopulation[0])
+    print("Fitness: ", clf.calculateFitness(
+        x_train, x_test, y_train, y_test, *initialPopulation[0]))
+    i += 1
