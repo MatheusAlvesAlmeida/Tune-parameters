@@ -1,4 +1,4 @@
-import pandas as pd
+import time
 from prepare_data import getTratedData
 import classifier as clf
 
@@ -6,7 +6,7 @@ df = getTratedData()
 
 x_train, x_test, y_train, y_test = clf.getTrainTestVariables(df)
 
-initialPopulation = clf.generatePopupation(10)
+population = clf.generatePopupation(10)
 
 i = 1
 """
@@ -23,20 +23,17 @@ Generate charts to show the evolution of the fitness to make next steps
 
 while(True):
     print("Generation: ", i)
-    initialPopulation = clf.sortByFitness(initialPopulation)
-    newPopulation = []
-    for i in range(5):
-        newPopulation.append(initialPopulation[i])
-        newPopulation.append(initialPopulation[i])
-    for i in range(5):
-        newPopulation.append(clf.mutate(initialPopulation[i]))
-    initialPopulation = newPopulation
-    if clf.checkIfFitnessDoesntChange(clf.calculateFitness(x_train, x_test, y_train, y_test, *initialPopulation[0])):
-        print("Best individual: ", initialPopulation[0])
+    population = clf.sortByFitness(
+        population, x_train, x_test, y_train, y_test)
+    if clf.checkIfFitnessDoesntChange(clf.calculateFitness(x_train, x_test, y_train, y_test, *population[0])):
+        print("Best individual: ", population[0])
         print("Fitness: ", clf.calculateFitness(
-            x_train, x_test, y_train, y_test, *initialPopulation[0]))
+            x_train, x_test, y_train, y_test, *population[0]))
         break
-    print("Best individual: ", initialPopulation[0])
+    parents1, parents2 = clf.parentSelection(population)
+
+    print("Best individual: ", population[0])
     print("Fitness: ", clf.calculateFitness(
-        x_train, x_test, y_train, y_test, *initialPopulation[0]))
+        x_train, x_test, y_train, y_test, *population[0]))
     i += 1
+    time.sleep(5)
