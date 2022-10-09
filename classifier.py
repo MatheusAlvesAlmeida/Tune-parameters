@@ -42,18 +42,18 @@ def sortByFitness(population, x_train, x_test, y_train, y_test):
 
 
 def checkIfFitnessDoesntChange(newFitness):
-    if len(last10) == 10:
+    if len(last10) == 50:
+        if all(x == last10[0] for x in last10):
+            return True
         last10.pop(0)
         last10.append(newFitness)
         return False
-    if len(last10) < 10:
-        last10.append(newFitness)
-        return False
-    return all(element == last10[0] for element in last10)
+    last10.append(newFitness)
+    return False
 
 
 def mutate(individual):
-    gene = random.randint(0, 9)
+    gene = random.randint(0, 6)
     if gene == 0:
         if individual[0] == 'gini':
             individual[0] = 'entropy'
@@ -66,28 +66,33 @@ def mutate(individual):
             individual[1] = 'best'
     elif gene == 2:
         individual[2] = random.randint(lower_depth, upper_depth)
-    elif gene in [4, 5]:
-        individual[gene] = random.uniform(
-            lower_samples_leaf, upper_samples_leaf)
-    elif gene in [3, 6, 8]:
-        individual[gene] = random.random()
-    elif gene == 7:
-        individual[7] = random.randint(lower_leaf_nodes, upper_leaf_nodes)
-    elif gene == 9:
-        if individual[9] == 'balanced':
-            individual[9] = None
+    elif gene == 3:
+        individual[3] = random.randint(lower_leaf_nodes, upper_leaf_nodes)
+    elif gene == 4:
+        if individual[4] == 'balanced':
+            individual[4] = None
         else:
-            individual[9] = 'balanced'
+            individual[4] = 'balanced'
+    elif gene == 5:
+        individual[5] = random.uniform(lower_samples_leaf, upper_samples_leaf)
 
     return individual
 
-# Whole Arithmetic Recombination
+# Whole arithmatic crossover
 
 
 def crossover(parent1, parent2, alpha=0.5):
-    child = []
-    for i in range(len(parent1)):
-        child.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+    size = 6
+    child = [None] * size
+    # Add the two first genes
+    child[0] = parent1[0]
+    child[1] = parent1[1]
+    for i in [2, 3, 5]:
+        child[i] = (alpha * parent1[i] + (1 - alpha) * parent2[i])
+    child[4] = parent1[4]
+    # cast index 2 and 3 to int
+    child[2] = int(child[2])
+    child[3] = int(child[3])
     return child
 
 
