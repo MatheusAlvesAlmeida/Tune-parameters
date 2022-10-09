@@ -18,9 +18,9 @@ def getTrainTestVariables(df):
     return train_test_split(df.drop('Survived', axis=1), df['Survived'], test_size=0.30)
 
 
-def calculateFitness(X_train, X_test, y_train, y_test, criterion, splitter, max_depth, min_samples_leaf, class_weight):
+def calculateFitness(X_train, X_test, y_train, y_test, criterion, splitter, max_depth, max_leaf_nodes, class_weight, min_samples_leaf):
     model = DecisionTreeClassifier(criterion=criterion, splitter=splitter, max_depth=max_depth,
-                                   min_samples_leaf=min_samples_leaf, class_weight=class_weight)
+                                   min_samples_leaf=min_samples_leaf, class_weight=class_weight, max_leaf_nodes=max_leaf_nodes)
     model.fit(X_train, y_train)
     predictions = model.predict(X_test)
     return classification_report(y_test, predictions, output_dict=True)['accuracy']
