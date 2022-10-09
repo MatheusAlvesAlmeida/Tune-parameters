@@ -21,9 +21,15 @@ To do:
 Generate charts to show the evolution of the fitness to make next steps
 """
 
-while(True):
+while (True):
     print("Generation: ", i)
-    initialPopulation = clf.sortByFitness(initialPopulation)
+    initialPopulation = clf.sortByFitness(
+        initialPopulation, x_train, x_test, y_train, y_test)
+
+    # apply crossover
+    child1 = clf.crossover(initialPopulation[0], initialPopulation[1], 0.6)
+    child2 = clf.crossover(initialPopulation[1], initialPopulation[0], 0.6)
+
     newPopulation = []
     for i in range(5):
         newPopulation.append(initialPopulation[i])

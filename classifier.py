@@ -37,8 +37,8 @@ def generatePopupation(size):
     return params
 
 
-def sortByFitness(population):
-    return sorted(population, key=calculateFitness(), reverse=True)
+def sortByFitness(population, x_train, x_test, y_train, y_test):
+    return sorted(population, key=lambda x: calculateFitness(x_train, x_test, y_train, y_test, *x), reverse=True)
 
 
 def checkIfFitnessDoesntChange(newFitness):
@@ -80,6 +80,15 @@ def mutate(individual):
             individual[9] = 'balanced'
 
     return individual
+
+# Whole Arithmetic Recombination
+
+
+def crossover(parent1, parent2, alpha=0.5):
+    child = []
+    for i in range(len(parent1)):
+        child.append(alpha * parent1[i] + (1 - alpha) * parent2[i])
+    return child
 
 
 def parentSelection(population):
