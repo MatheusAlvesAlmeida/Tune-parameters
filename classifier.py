@@ -91,9 +91,9 @@ def crossover(parent1, parent2, alpha=0.5):
     return child
 
 
-def parentSelection(population):
+def parentSelection(population, x_train, x_test, y_train, y_test):
     parents = []
     for i in range(10):
         parents.append(random.choice(population))
-    parents = sortByFitness(parents)
+    parents = sortByFitness(parents, x_train, x_test, y_train, y_test)
     return [parents[0], parents[1]]
