@@ -6,10 +6,10 @@ from sklearn.metrics import classification_report
 
 criterions = ['gini', 'entropy']
 splits = ['best', 'random']
-lower_depth, upper_depth = 2, 100
-lower_leaf_nodes, upper_leaf_nodes = 2, 100
+lower_depth, upper_depth = 2, 6
+lower_leaf_nodes, upper_leaf_nodes = 2, 6
 class_weight = ['balanced', None]
-lower_samples_leaf, upper_samples_leaf = 0, 0.5
+lower_samples_leaf, upper_samples_leaf = 0.01, 0.5
 
 last10 = []
 
@@ -32,7 +32,8 @@ def generatePopupation(size):
         params.append([random.choice(criterions), random.choice(splits), random.randint(lower_depth, upper_depth),
                        random.randint(lower_leaf_nodes, upper_leaf_nodes), random.choice(
             class_weight),
-            random.uniform(lower_samples_leaf, upper_samples_leaf)])
+            float("{0:.3f}".format(
+            random.uniform(lower_samples_leaf, upper_samples_leaf)))])
 
     return params
 
@@ -74,7 +75,7 @@ def mutate(individual):
         else:
             individual[4] = 'balanced'
     elif gene == 5:
-        individual[5] = random.uniform(lower_samples_leaf, upper_samples_leaf)
+        individual[5] = float("{0:.3f}".format(random.uniform(lower_samples_leaf, upper_samples_leaf)))
 
     return individual
 
