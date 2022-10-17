@@ -13,33 +13,23 @@ population = clf.generatePopupation(50)
 
 i = 1
 
-f = open("demofile10.txt", "a")
+f = open("thanos3.txt", "a")
 
-while (True):
+while (i < 100):
     print("Generation: ", i)
     population = clf.sortByFitness(
         population, x_train, x_test, y_train, y_test)
     if clf.checkIfFitnessDoesntChange(clf.calculateFitness(x_train, x_test, y_train, y_test, *population[0])):
-        print("Fitness does not change. Best individual: ", population[0])
-        print("Fitness: ", clf.calculateFitness(
-            x_train, x_test, y_train, y_test, *population[0]))
-        break
-    parents1, parents2 = clf.parentSelection(
-        population, x_train, x_test, y_train, y_test)
+        # Mutate the best individual
+        population[0] = clf.mutate(population[0])
 
-    # Crossover
-    child1 = clf.crossover(population[0], population[1], 0.5)
-    child2 = clf.crossover(population[1], population[0], 0.5)
+    # Delete 50% of population and replace it with new individuals (crossover and mutation)
 
-    # Mutation
-    child1 = clf.mutate(child1)
-    child2 = clf.mutate(child2)
-
-    # Replace the worst individuals
-    if clf.calculateFitness(x_train, x_test, y_train, y_test, *child1) > clf.calculateFitness(x_train, x_test, y_train, y_test, *population[-1]):
-        population[-1] = child1
-    if clf.calculateFitness(x_train, x_test, y_train, y_test, *child2) > clf.calculateFitness(x_train, x_test, y_train, y_test, *population[-2]):
-        population[-2] = child2
+    population = population[:25]
+    for j in range(25):
+        parent1 = population[random.randint(0, 24)]
+        parent2 = population[random.randint(0, 24)]
+        population.append(clf.crossover(parent1, parent2))
 
     # Sort by fitness
     population = clf.sortByFitness(

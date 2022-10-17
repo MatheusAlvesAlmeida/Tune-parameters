@@ -33,7 +33,7 @@ def generatePopupation(size):
                        random.randint(lower_leaf_nodes, upper_leaf_nodes), random.choice(
             class_weight),
             float("{0:.3f}".format(
-            random.uniform(lower_samples_leaf, upper_samples_leaf)))])
+                random.uniform(lower_samples_leaf, upper_samples_leaf)))])
 
     return params
 
@@ -43,7 +43,7 @@ def sortByFitness(population, x_train, x_test, y_train, y_test):
 
 
 def checkIfFitnessDoesntChange(newFitness):
-    if len(last10) == 50:
+    if len(last10) == 15:
         if all(x == last10[0] for x in last10):
             return True
         last10.pop(0)
@@ -75,7 +75,8 @@ def mutate(individual):
         else:
             individual[4] = 'balanced'
     elif gene == 5:
-        individual[5] = float("{0:.3f}".format(random.uniform(lower_samples_leaf, upper_samples_leaf)))
+        individual[5] = float("{0:.3f}".format(
+            random.uniform(lower_samples_leaf, upper_samples_leaf)))
 
     return individual
 
