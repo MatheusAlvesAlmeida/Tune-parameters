@@ -24,8 +24,10 @@ while (True):
         print("Fitness: ", clf.calculateFitness(
             x_train, x_test, y_train, y_test, *population[0]))
         break
-    parents1, parents2 = clf.parentSelection(
-        population, x_train, x_test, y_train, y_test)
+
+    fitnesses = [clf.calculateFitness(
+        x_train, x_test, y_train, y_test, *x) for x in population]
+    parents1, parents2 = clf.parentSelection(population, fitnesses)
 
     # Crossover
     child1 = clf.crossover(population[0], population[1], 0.5)

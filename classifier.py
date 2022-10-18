@@ -33,7 +33,7 @@ def generatePopupation(size):
                        random.randint(lower_leaf_nodes, upper_leaf_nodes), random.choice(
             class_weight),
             float("{0:.3f}".format(
-            random.uniform(lower_samples_leaf, upper_samples_leaf)))])
+                random.uniform(lower_samples_leaf, upper_samples_leaf)))])
 
     return params
 
@@ -75,31 +75,55 @@ def mutate(individual):
         else:
             individual[4] = 'balanced'
     elif gene == 5:
-        individual[5] = float("{0:.3f}".format(random.uniform(lower_samples_leaf, upper_samples_leaf)))
+        individual[5] = float("{0:.3f}".format(
+            random.uniform(lower_samples_leaf, upper_samples_leaf)))
 
     return individual
 
 # Whole arithmatic crossover
 
 
-def crossover(parent1, parent2, alpha=0.5):
+def crossover(parent1, parent2, alpha):
     size = 6
     child = [None] * size
     # Add the two first genes
-    child[0] = parent1[0]
-    child[1] = parent1[1]
+    fistGene = [parent1[0], parent2[0]]
+    secondGene = [parent1[1], parent2[1]]
+    fourGene = [parent1[4], parent2[4]]
+    child[0] = random.choice(fistGene)
+    child[1] = random.choice(secondGene)
     for i in [2, 3, 5]:
         child[i] = (alpha * parent1[i] + (1 - alpha) * parent2[i])
-    child[4] = parent1[4]
+    child[4] = random.choice(fourGene)
     # cast index 2 and 3 to int
     child[2] = int(child[2])
     child[3] = int(child[3])
     return child
 
 
-def parentSelection(population, x_train, x_test, y_train, y_test):
-    parents = []
-    for i in range(10):
-        parents.append(random.choice(population))
-    parents = sortByFitness(parents, x_train, x_test, y_train, y_test)
-    return [parents[0], parents[1]]
+# Parent selection by the roulette wheel method
+def parentSelection(population, fitnesses):
+    # Select two parents
+    parent1 = None
+    parent2 = None
+    # Get the sum of all fitnesses
+    fitnessSum = sum(fitnesses)
+    # Get a random number between 0 and the sum of all fitnesses
+    rand = random.uniform(0, fitnessSum)
+    # Go through the population and add the fitnesses until the random number is reached
+    fitnessSum = 0
+    for i in range(len(population)):
+        fitnessSum += fitnesses[i]
+        if fitnessSum >= rand:
+            parent1 = population[i]
+            break
+    # Get a random number between 0 and the sum of all fitnesses
+    rand = random.uniform(0, fitnessSum)
+    # Go through the population and add the fitnesses until the random number is reached
+    fitnessSum = 0
+    for i in range(len(population)):
+        fitnessSum += fitnesses[i]
+        if fitnessSum >= rand:
+            parent2 = population[i]
+            break
+    return parent1, parent2
