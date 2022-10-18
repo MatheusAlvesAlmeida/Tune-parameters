@@ -13,7 +13,7 @@ population = clf.generatePopupation(50)
 
 i = 1
 
-f = open("demofile10.txt", "a")
+f = open("collectedData3.txt", "a")
 
 while (True):
     print("Generation: ", i)
